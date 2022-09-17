@@ -12,9 +12,8 @@ dotenv.config()
 connectToMongo()
 
 app.use(bodyParser.json()) 
-app.use(cors())
 
-app.use('/api', userRouter)
+app.use('/api', cors(), userRouter)
 app.use('/', ...swaggerMiddleware)
 
 app.listen(process.env.SERVER_PORT)

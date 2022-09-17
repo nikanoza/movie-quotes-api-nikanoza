@@ -7,7 +7,7 @@ info:
 servers:
   - url: https://folksoul-api.nika-nozadze.redberryinternship.ge/api
     description: production server
-  - url: http://localhost:8000/api
+  - url: http://localhost:4000/api
     description: local server  
 components:
   securitySchemes:
@@ -16,12 +16,11 @@ components:
       scheme: bearer
       bearerFormat: JWT
 paths:
-  /login:
+  /users/new:
     post:
       tags:
-        - Auth  
+        - Users  
       requestBody:
-        description: JWT bearer authorization
         required: true
         content:
           application/json:
@@ -32,10 +31,15 @@ paths:
                     type: string
                   password: 
                     type: string
+                  repeatPassword:
+                    type: string
+                  email:
+                    type: string
             example:
               name: nikanoza
-              password: dardubala
-              
+              password: astarta16
+              repeatPassword: astarta16
+              email: nikanozadze1010@gmail.com
       responses:
-        '200':
-          description: login successfully
+        '201':
+          description: user register successfully

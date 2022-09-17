@@ -8,8 +8,8 @@ const emailVerificationSchema = new Schema<TEmailVerification>({
         type: Schema.Types.String,
         required: true
     },
-    userId: {
-        type: Schema.Types.Number,
+    email: {
+        type: Schema.Types.String,
         required: true
     }
 })
