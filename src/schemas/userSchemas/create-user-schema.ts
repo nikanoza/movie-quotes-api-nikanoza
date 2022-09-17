@@ -1,17 +1,24 @@
-import { User } from "models"
-import { SUser, TUser } from "types"
+import { Email, User } from "models"
+import { SUser, TEmail, TUser } from "types"
 import Joi from 'joi'
 
 const determineIfUserExists = (user: TUser | null) => (value: string, helpers: any) => {
     if(user){
         return helpers.message('მომხმარებელი ამ პაროლით უკვვე არსებობს')
     }
+    return value
+}
 
+const determineIfEmailExists = (email: TEmail | null) => (value: string, helpers: any) => {
+    if(email){
+        return helpers.message('ელ-ფოსტა უკვე გამოყენებულია')
+    }
     return value
 }
 
 const createUserSchema = async (data: SUser) => {
-    const user = User.findOne({ name: data.name})
+    const user = await User.findOne({ name: data.name})
+    const email = await Email.findOne({ email: data.email})
 
     return Joi.object<SUser>({
         name: Joi.string()
@@ -46,7 +53,16 @@ const createUserSchema = async (data: SUser) => {
                 "string.base": "პაროლი უნდა იყოს ტექსტური",
                 "string.valid": "უნდა ემთხვეოდეს პაროლს",
                 "string.required": "პაროლის ველი არ უნდა იყოს ცარიელი"
-            })
+            }),
+        email: Joi.string()
+            .custom(determineIfEmailExists(email))
+            .email()
+            .required()
+            .messages({
+                "string.base": "ელ-ფოსტა უნდა იყოს ტექსტური",
+                "string.email": "არ შეესაბამება ელ-ფოსტის ფორმატს",
+                "string.required": "ელ-ფოსტის ველი არ უნდა იყოს ცარიელი"
+            })    
     })
 }
 

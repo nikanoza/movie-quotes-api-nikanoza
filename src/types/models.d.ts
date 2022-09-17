@@ -14,7 +14,7 @@ export type TUser = {
 
 export type TEmailVerification = {
     hash: string;
-    userId: number;
+    email: string;
 }
 
 export type TAvatar = {
