@@ -12,6 +12,7 @@ dotenv.config()
 connectToMongo()
 
 app.use(bodyParser.json()) 
+app.use('/storage', express.static('public/assets'))
 
 app.use('/api', cors(), userRouter)
 app.use('/', ...swaggerMiddleware)

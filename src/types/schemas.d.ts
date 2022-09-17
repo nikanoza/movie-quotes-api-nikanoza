@@ -3,4 +3,5 @@ export type SUser = {
     password: string;
     repeatPassword: string;
     email: string;
+    redirectLink: string;
 }

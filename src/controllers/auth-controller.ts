@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import { Email, EmailVerification, User } from 'models'
 import { createUserSchema } from 'schemas'
+import { sendEmailConfirmation } from 'mail'
 
 export const registration = async (req: express.Request, res: express.Response) => {
     const { body } = req
@@ -14,7 +15,7 @@ export const registration = async (req: express.Request, res: express.Response) 
         return res.status(422).json(error.details)
     }
 
-    const { name, password, email } = data
+    const { name, password, email, redirectLink } = data
     const lastUser  = await User.find().sort({ _id: -1 }).limit(1)
     const id = lastUser.length ? lastUser[0].id + 1 : 1
     const salt = await bcrypt.genSalt(10)
@@ -40,6 +41,8 @@ export const registration = async (req: express.Request, res: express.Response) 
         hash: verificationHash,
         email
     })
+
+    await sendEmailConfirmation(email, verificationHash, name, redirectLink)
 
     return res.status(201).json({message: "new user create successfully" })
 }

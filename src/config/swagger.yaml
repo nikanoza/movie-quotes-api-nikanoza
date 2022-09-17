@@ -16,7 +16,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
 paths:
-  /users/new:
+  /register:
     post:
       tags:
         - Users  
@@ -35,11 +35,14 @@ paths:
                     type: string
                   email:
                     type: string
+                  redirectLink:
+                    type: string
             example:
               name: nikanoza
               password: astarta16
               repeatPassword: astarta16
               email: nikanozadze1010@gmail.com
+              redirectLink: https://folksoul.nika-nozadze.redberryinternship.ge
       responses:
         '201':
           description: user register successfully
