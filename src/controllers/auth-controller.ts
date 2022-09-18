@@ -46,3 +46,27 @@ export const registration = async (req: express.Request, res: express.Response) 
 
     return res.status(201).json({message: "new user create successfully" })
 }
+
+export const emailVerification = async (req: express.Request, res:express.Response) => {
+    const { hash } = req.body
+
+    const emailVerification = await EmailVerification.findOne({ hash })
+
+    if(!emailVerification){
+        return res.status(422).json({message: 'მონაცემები ვერ მოიძებნა'})
+    }
+
+    const email = await Email.findOne({ email: emailVerification.email})
+
+    if(!email){
+        return res.status(422).json({message: 'მონაცემები ვერ მოიძებნა'})
+    }
+
+    await email.updateOne({ verify: true})
+    await User.findOneAndUpdate({id: email.userId}, {confirmed: true})
+
+    await emailVerification.delete()
+
+    return res.json({message: "email verified" })
+
+}

@@ -5,3 +5,7 @@ export type SUser = {
     email: string;
     redirectLink: string;
 }
+
+export type SEmailConfirmation = {
+    hash: string;
+}
