@@ -9,3 +9,8 @@ export type SUser = {
 export type SEmailConfirmation = {
     hash: string;
 }
+
+export type SSendRecovery = {
+    email: string;
+    redirectLink: string;
+}

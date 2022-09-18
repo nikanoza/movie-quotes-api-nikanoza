@@ -64,9 +64,9 @@ const createUserSchema = async (data: SUser) => {
                 "any.required": "ელ-ფოსტის ველი არ უნდა იყოს ცარიელი"
             }),
         redirectLink: Joi.string().required().messages({
-            'string.base': 'redirectLink field should be string.',
-            'any.required': 'redirectLink field is required.',
-        })       
+            'string.base': 'ლინკი უნდა იყოს ტექსტური',
+            'any.required': 'ლინკჯის ველი არ უნდა იყოს ცარიელი',
+        })
     })
 }
 
