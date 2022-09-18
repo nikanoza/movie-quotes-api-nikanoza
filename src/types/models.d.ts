@@ -21,3 +21,8 @@ export type TAvatar = {
     url: string;
     userId: number;
 }
+
+export type TPasswordRecovery = {
+    hash: string;
+    userId: number;
+}
