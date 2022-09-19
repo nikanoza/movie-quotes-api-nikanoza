@@ -34,7 +34,7 @@ export const passwordRecoverySend = async (req: express.Request, res: express.Re
     return res.status(201).json({message: "password recovery link send" })
 }
 
-export const passwordReset = async (req: express.Request, res: express.Response) => {
+export const passwordRecovery = async (req: express.Request, res: express.Response) => {
     const { body } = req
 
     const validator = await passwordRecoverySchema(body)
