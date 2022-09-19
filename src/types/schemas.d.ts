@@ -20,3 +20,13 @@ export type SPasswordRecovery = {
     repeatPassword: string;
     hash: string;
 }
+
+export type TLoginName = {
+    name: string; 
+    password: string;
+}
+
+export type TLoginEmail = {
+    email:string;
+    password: string;
+}

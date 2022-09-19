@@ -1,9 +1,11 @@
 import express from 'express'
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
+import jwt from 'jsonwebtoken'
 import { Email, EmailVerification, User } from 'models'
-import { createUserSchema } from 'schemas'
+import { createUserSchema, loginEmailSchema, loginNameSchema } from 'schemas'
 import { sendEmailConfirmation } from 'mail'
+import { TLoginName } from 'types'
 
 export const registration = async (req: express.Request, res: express.Response) => {
     const { body } = req
@@ -69,3 +71,66 @@ export const emailVerification = async (req: express.Request, res:express.Respon
 
     return res.json({message: "email verified" })
 }
+
+export const loginWithName = async (req: express.Request, res: express.Response) => {
+    const { body } = req
+
+    const validator = await loginNameSchema(body)
+
+    const { value:data, error } = validator.validate(body)
+
+    if(error){
+        return res.status(422).json(error.details)
+    }
+
+    const { name, password } = data
+
+    const user = await User.findOne({ name }).select('+password')
+    const compare = await bcrypt.compare(password, user?.password || '')
+
+    if(compare){
+        const signData: TLoginName = {
+            name: user?.name || '',
+            password: user?.password || ''
+        }
+
+        const token = jwt.sign(signData, process.env.JWT_SECRET || '')
+        return res.json({ token })
+    }
+
+    return res
+    .status(401)
+    .json({ message: 'მონაცემები არასწორია' })
+}
+
+export const loginWithEmail = async (req: express.Request, res: express.Response) => {
+    const { body } = req
+
+    const validator = await loginEmailSchema(body)
+
+    const { value:data, error } = validator.validate(body)
+
+    if(error){
+        return res.status(422).json(error.details)
+    }
+
+    const { email, password } = data
+    const emailDocument = await Email.findOne({ email })
+    const user = await User.findOne({ id:emailDocument?.userId }).select('+password')
+    const compare = await bcrypt.compare(password, user?.password || '')
+
+    if(compare){
+        const signData: TLoginName = {
+            name: user?.name || '',
+            password: user?.password || ''
+        }
+
+        const token = jwt.sign(signData, process.env.JWT_SECRET || '')
+        return res.json({ token })
+    }
+
+    return res
+    .status(401)
+    .json({ message: 'მონაცემები არასწორია' })
+}
+

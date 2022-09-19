@@ -2,9 +2,8 @@ import express from 'express'
 import crypto from 'crypto'
 import bcrypt from 'bcrypt'
 import { Email, PasswordRecovery, User } from 'models'
-import { sendRecoverySchema } from 'schemas'
+import { passwordRecoverySchema, sendRecoverySchema } from 'schemas'
 import { sendPasswordRecovery } from 'mail'
-import passwordRecoverySchema from 'schemas/userSchemas/password-recovery-schema'
 
 export const passwordRecoverySend = async (req: express.Request, res: express.Response) => {
     const { body } = req
