@@ -24,3 +24,12 @@ export const sendEmailConfirmation = async (to:string, hash:string, name: string
     })
     return send(to, 'Email Confirmation', html)
 }
+
+export const sendPasswordRecovery = async (to:string, hash:string, name: string, backLink:string) => {
+    const html = edge.renderSync('password-recovery', {
+        link: `${backLink}?hash=${hash}`,
+        name
+    })
+
+    return send(to, 'Password Reset', html)
+}

@@ -1,7 +1,8 @@
 import express from 'express'
 import crypto from 'crypto'
-import { Email, PasswordRecovery } from 'models'
+import { Email, PasswordRecovery, User } from 'models'
 import { sendRecoverySchema } from 'schemas'
+import { sendPasswordRecovery } from 'mail'
 
 export const passwordRecoverySend = async (req: express.Request, res: express.Response) => {
     const { body } = req
@@ -24,4 +25,9 @@ export const passwordRecoverySend = async (req: express.Request, res: express.Re
         userId: emailDocument?.userId
     })
 
+    const user = await User.findOne({id: emailDocument?.userId})
+
+    await sendPasswordRecovery(email, hash, user?.name || '', redirectLink)
+
+    return res.status(201).json({message: "password recovery link send" })
 }
