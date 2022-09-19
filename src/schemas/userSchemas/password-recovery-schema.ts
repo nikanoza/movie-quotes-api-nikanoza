@@ -1,6 +1,14 @@
 import Joi from "joi"
 import { PasswordRecovery } from "models"
-import { SPasswordRecovery } from "types"
+import { SPasswordRecovery, TPasswordRecovery } from "types"
+
+const determineIfHashExists = (passwordRecovery: TPasswordRecovery | null) => (value:string, helpers: any) => {
+    if(!passwordRecovery){
+        return helpers.message('მონაცემები არასწორია')
+    }
+
+    return value
+}
 
 const passwordRecoverySchema = async (data: SPasswordRecovery) => {
     const passwordRecovery = await PasswordRecovery.findOne({ hash: data.hash })
@@ -26,6 +34,15 @@ const passwordRecoverySchema = async (data: SPasswordRecovery) => {
                 "string.valid": "უნდა ემთხვეოდეს პაროლს",
                 "any.required": "პაროლის ველი არ უნდა იყოს ცარიელი"
             }),
-        
+        hash: Joi.string()
+            .required()
+            .custom(determineIfHashExists(passwordRecovery))
+            .messages({
+                "string.base": "ჰეში უნდა იყოს ტექსტური",
+                "any.required": "ჰეშის ველი არ უნდა იყოს ცარიელი"
+        })
     })
 }
+
+export default passwordRecoverySchema
+

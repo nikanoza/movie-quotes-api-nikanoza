@@ -68,5 +68,4 @@ export const emailVerification = async (req: express.Request, res:express.Respon
     await emailVerification.delete()
 
     return res.json({message: "email verified" })
-
 }
