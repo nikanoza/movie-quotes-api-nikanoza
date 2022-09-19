@@ -14,3 +14,9 @@ export type SSendRecovery = {
     email: string;
     redirectLink: string;
 }
+
+export type SPasswordRecovery = {
+    password: string;
+    repeatPassword: string;
+    hash: string;
+}
