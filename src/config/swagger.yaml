@@ -101,12 +101,53 @@ paths:
                   repeatPassword:
                     type: string
                   hash:
-                    type: string
-                   
+                    type: string    
             example:
               password: nixena16
               repeatPassword: nixena16
               hash: 45c8866eea81385afa7074306c9e7aed670cbe3c638aefd42ad0689a7b3294e0aa48d44536dd2f2f2fac669480ec41df
+      responses:
+        '200':
+          description: password changed!
+  /login/name:
+    post:
+      tags:
+        - Users  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: 'object'
+              properties:
+                  name:
+                    type: string
+                  password: 
+                    type: string      
+            example:
+              name: nikanoza
+              password: nixena16
+      responses:
+        '200':
+          description: login successfully!
+  /login/email:
+    post:
+      tags:
+        - Users  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: 'object'
+              properties:
+                  email:
+                    type: string
+                  password: 
+                    type: string      
+            example:
+              email: nikanozadze1010@gmail.com
+              password: nixena16
       responses:
         '200':
           description: password changed!

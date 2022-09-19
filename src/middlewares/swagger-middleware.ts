@@ -1,3 +1,4 @@
+import path from 'path'
 import SwaggerUI from 'swagger-ui-express'
 import YAML from 'yamljs'
 
@@ -6,5 +7,5 @@ const options = {
   customSiteTitle: 'Movie Quotes',
 }
 
-const swaggerDocument = YAML.load('./src/config/swagger.yaml')
+const swaggerDocument = YAML.load(path.join(__dirname, '../config/swagger.yaml'))
 export default [SwaggerUI.serve , SwaggerUI.setup(swaggerDocument, options)]
