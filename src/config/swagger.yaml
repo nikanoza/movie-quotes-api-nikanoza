@@ -64,3 +64,24 @@ paths:
       responses:
         '200':
           description: email verified
+  /password/send-link:
+    post: 
+      tags:
+        - Users  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: 'object'
+              properties:
+                  email:
+                    type: string
+                  redirectLink:
+                    type: string
+            example:
+              email: nikanozadze1010@gmail.com
+              redirectLink: https://folksoul.nika-nozadze.redberryinternship.ge
+      responses:
+        '201':
+          description: send password recovery link
