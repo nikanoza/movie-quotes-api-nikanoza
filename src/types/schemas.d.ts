@@ -35,4 +35,5 @@ export type SUserEdit = {
     name: string; 
     password: string;
     repeatPassword: string;
+    id: number;
 }

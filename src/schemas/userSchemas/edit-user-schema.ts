@@ -10,11 +10,10 @@ const determineIfUserExists = (user: TUser | null) => (value: string, helpers: a
 }
 
 const editUserSchema = async (data: SUserEdit) => {
-    const user = await User.findOne({ name: data.name})
+    const user = await User.findOne({ id: data.id})
 
     return Joi.object({
         name: Joi.string()
-            .custom(determineIfUserExists(user))
             .min(3)
             .max(15)
             .pattern(/^[a-z0-9]*$/)
@@ -45,6 +44,14 @@ const editUserSchema = async (data: SUserEdit) => {
                 "string.base": "პაროლი უნდა იყოს ტექსტური",
                 "string.valid": "უნდა ემთხვეოდეს პაროლს",
                 "any.required": "პაროლის ველი არ უნდა იყოს ცარიელი"
+            }),
+        id: Joi.number()
+            .custom(determineIfUserExists(user))
+            .required()
+            .messages({
+              'number.base': 'id field should be number.',
+              'number.custom': 'singer not found',
+              'any.required': 'id field is required.',
             }),
     })
 }
