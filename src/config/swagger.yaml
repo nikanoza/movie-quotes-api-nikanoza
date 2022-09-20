@@ -5,9 +5,9 @@ info:
   version: 0.1.9
 
 servers:
-  - url: https://folksoul-api.nika-nozadze.redberryinternship.ge/api
+  - url: https://movie-quotes-api.nika-nozadze.redberryinternship.ge/api
     description: production server
-  - url: http://localhost:4000/api
+  - url: http://localhost:4444/api
     description: local server  
 components:
   securitySchemes:
@@ -151,3 +151,37 @@ paths:
       responses:
         '200':
           description: password changed!
+  /user-edit/{id}:       
+    put:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            example: 1
+          required: true
+      tags:
+        - Users
+      security:
+        - bearerAuth: []    
+      requestBody:
+        description: update user
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                  name:
+                    type: string
+                  password:
+                    type: string
+                  repeatPassword:
+                    type: string  
+            example:
+              name: nikanoza
+              password: liverpool
+              repeatPassword: liverpool
+      responses:
+        '200':
+          description: Singer updated  

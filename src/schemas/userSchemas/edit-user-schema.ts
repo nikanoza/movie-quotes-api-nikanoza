@@ -2,7 +2,7 @@ import Joi from "joi";
 import { User } from "models";
 import { SUserEdit, TUser } from "types";
 
-const determineIfUserExists = (user: TUser | null) => (value: string, helpers: any) => {
+const determineIfUserExists = (user: TUser | null) => (value: number, helpers: any) => {
     if(!user){
         return helpers.message('მომხმარებელი ვერ მოიძებნა')
     }
@@ -49,9 +49,8 @@ const editUserSchema = async (data: SUserEdit) => {
             .custom(determineIfUserExists(user))
             .required()
             .messages({
-              'number.base': 'id field should be number.',
-              'number.custom': 'singer not found',
-              'any.required': 'id field is required.',
+              'number.base': 'აიდი უნდა იყოს ციფრი',
+              'any.required': 'აიდის ველი სავალდებულოა',
             }),
     })
 }

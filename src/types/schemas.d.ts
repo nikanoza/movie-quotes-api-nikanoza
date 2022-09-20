@@ -37,3 +37,9 @@ export type SUserEdit = {
     repeatPassword: string;
     id: number;
 }
+
+export type TAddEmail = {
+    email: string;
+    redirectLink: string;
+    id: string;
+}
