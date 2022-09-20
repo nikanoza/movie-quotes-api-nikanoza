@@ -30,3 +30,9 @@ export type TLoginEmail = {
     email:string;
     password: string;
 }
+
+export type SUserEdit = {
+    name: string; 
+    password: string;
+    repeatPassword: string;
+}

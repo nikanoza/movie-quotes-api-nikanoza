@@ -86,6 +86,11 @@ export const loginWithName = async (req: express.Request, res: express.Response)
     const { name, password } = data
 
     const user = await User.findOne({ name }).select('+password')
+
+    if(!user?.confirmed){
+        return res.status(401).json({ message: 'მომხმარებელი არაა ვერიფიცირებული' })
+    }
+
     const compare = await bcrypt.compare(password, user?.password || '')
 
     if(compare){
@@ -98,9 +103,7 @@ export const loginWithName = async (req: express.Request, res: express.Response)
         return res.json({ token })
     }
 
-    return res
-    .status(401)
-    .json({ message: 'მონაცემები არასწორია' })
+    return res.status(401).json({ message: 'მონაცემები არასწორია' })
 }
 
 export const loginWithEmail = async (req: express.Request, res: express.Response) => {
@@ -117,6 +120,11 @@ export const loginWithEmail = async (req: express.Request, res: express.Response
     const { email, password } = data
     const emailDocument = await Email.findOne({ email })
     const user = await User.findOne({ id:emailDocument?.userId }).select('+password')
+
+    if(!user?.confirmed){
+        return res.status(401).json({ message: 'მომხმარებელი არაა ვერიფიცირებული' })
+    }
+    
     const compare = await bcrypt.compare(password, user?.password || '')
 
     if(compare){
