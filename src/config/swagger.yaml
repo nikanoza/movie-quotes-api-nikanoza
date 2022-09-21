@@ -5,9 +5,9 @@ info:
   version: 0.1.9
 
 servers:
-  - url: https://folksoul-api.nika-nozadze.redberryinternship.ge/api
+  - url: https://movie-quotes-api.nika-nozadze.redberryinternship.ge/api
     description: production server
-  - url: http://localhost:4000/api
+  - url: http://localhost:4444/api
     description: local server  
 components:
   securitySchemes:
@@ -46,3 +46,142 @@ paths:
       responses:
         '201':
           description: user register successfully
+  /verify:
+    post:
+      tags:
+        - Users  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: 'object'
+              properties:
+                  hash:
+                    type: string 
+            example:
+              hash: 45c8866eea81385afa7074306c9e7aed670cbe3c638aefd42ad0689a7b3294e0aa48d44536dd2f2f2fac669480ec41df
+      responses:
+        '200':
+          description: email verified
+  /password/send-link:
+    post: 
+      tags:
+        - Users  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: 'object'
+              properties:
+                  email:
+                    type: string
+                  redirectLink:
+                    type: string
+            example:
+              email: nikanozadze1010@gmail.com
+              redirectLink: https://folksoul.nika-nozadze.redberryinternship.ge
+      responses:
+        '201':
+          description: send password recovery link
+  /password/recovery:
+    post:
+      tags:
+        - Users  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: 'object'
+              properties:
+                  password: 
+                    type: string
+                  repeatPassword:
+                    type: string
+                  hash:
+                    type: string    
+            example:
+              password: nixena16
+              repeatPassword: nixena16
+              hash: 45c8866eea81385afa7074306c9e7aed670cbe3c638aefd42ad0689a7b3294e0aa48d44536dd2f2f2fac669480ec41df
+      responses:
+        '200':
+          description: password changed!
+  /login/name:
+    post:
+      tags:
+        - Users  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: 'object'
+              properties:
+                  name:
+                    type: string
+                  password: 
+                    type: string      
+            example:
+              name: nikanoza
+              password: nixena16
+      responses:
+        '200':
+          description: login successfully!
+  /login/email:
+    post:
+      tags:
+        - Users  
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: 'object'
+              properties:
+                  email:
+                    type: string
+                  password: 
+                    type: string      
+            example:
+              email: nikanozadze1010@gmail.com
+              password: nixena16
+      responses:
+        '200':
+          description: password changed!
+  /user-edit/{id}:       
+    put:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: number
+            example: 1
+          required: true
+      tags:
+        - Users
+      security:
+        - bearerAuth: []    
+      requestBody:
+        description: update user
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                  name:
+                    type: string
+                  password:
+                    type: string
+                  repeatPassword:
+                    type: string  
+            example:
+              name: nikanoza
+              password: liverpool
+              repeatPassword: liverpool
+      responses:
+        '200':
+          description: Singer updated  

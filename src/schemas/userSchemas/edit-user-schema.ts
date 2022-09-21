@@ -1,28 +1,19 @@
-import { Email, User } from "models"
-import { SUser, TEmail, TUser } from "types"
-import Joi from 'joi'
+import Joi from "joi";
+import { User } from "models";
+import { SUserEdit, TUser } from "types";
 
-const determineIfUserExists = (user: TUser | null) => (value: string, helpers: any) => {
-    if(user){
-        return helpers.message('მომხმარებელი ამ პაროლით უკვვე არსებობს')
+const determineIfUserExists = (user: TUser | null) => (value: number, helpers: any) => {
+    if(!user){
+        return helpers.message('მომხმარებელი ვერ მოიძებნა')
     }
     return value
 }
 
-const determineIfEmailExists = (email: TEmail | null) => (value: string, helpers: any) => {
-    if(email){
-        return helpers.message('ელ-ფოსტა უკვე გამოყენებულია')
-    }
-    return value
-}
+const editUserSchema = async (data: SUserEdit) => {
+    const user = await User.findOne({ id: data.id})
 
-const createUserSchema = async (data: SUser) => {
-    const user = await User.findOne({ name: data.name})
-    const email = await Email.findOne({ email: data.email})
-
-    return Joi.object<SUser>({
+    return Joi.object({
         name: Joi.string()
-            .custom(determineIfUserExists(user))
             .min(3)
             .max(15)
             .pattern(/^[a-z0-9]*$/)
@@ -33,7 +24,7 @@ const createUserSchema = async (data: SUser) => {
                 "string.max": "სახელი უნდა შედგებოდეს მაქსიმუმ 15 სიმბოლოსგან",
                 "string.pattern": "სახელი უნდა შეიცავდეს მხოლოდ დაბალი რეგისტრის ლათინურ ასოებს და ციფრებს",
                 "any.required": "სახელის ველი არ უნდა იყოს ცარიელი"
-            }),
+        }),
         password: Joi.string()
             .min(8)
             .max(15)
@@ -54,20 +45,14 @@ const createUserSchema = async (data: SUser) => {
                 "string.valid": "უნდა ემთხვეოდეს პაროლს",
                 "any.required": "პაროლის ველი არ უნდა იყოს ცარიელი"
             }),
-        email: Joi.string()
-            .custom(determineIfEmailExists(email))
-            .email()
+        id: Joi.number()
+            .custom(determineIfUserExists(user))
             .required()
             .messages({
-                "string.base": "ელ-ფოსტა უნდა იყოს ტექსტური",
-                "string.email": "არ შეესაბამება ელ-ფოსტის ფორმატს",
-                "any.required": "ელ-ფოსტის ველი არ უნდა იყოს ცარიელი"
+              'number.base': 'აიდი უნდა იყოს ციფრი',
+              'any.required': 'აიდის ველი სავალდებულოა',
             }),
-        redirectLink: Joi.string().required().messages({
-            'string.base': 'ლინკი უნდა იყოს ტექსტური',
-            'any.required': 'ლინკჯის ველი არ უნდა იყოს ცარიელი',
-        })
     })
 }
 
-export default createUserSchema
+export default editUserSchema
